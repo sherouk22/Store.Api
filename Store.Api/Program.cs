@@ -8,7 +8,7 @@ namespace Store.Api
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -28,7 +28,7 @@ namespace Store.Api
 
             var app = builder.Build();
 
-            SeedDb(app);
+            await SeedDbAsync(app);
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -47,13 +47,13 @@ namespace Store.Api
             app.Run();
         }
 
-         static void SeedDb(WebApplication app)
+         static async Task SeedDbAsync(WebApplication app)
         {
             using var scope = app.Services.CreateScope();
 
             var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
 
-            dbInitializer.Initialize();
+           await dbInitializer.InitializeAsync();
         }
     }
 }
